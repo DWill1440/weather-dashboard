@@ -1,5 +1,7 @@
 $(document).ready(function() {
   const listOfCities = [];
+  // define initiateSearch function
+  
   $("#test-button").on("click", () => {
       if ($("#search-bar").val() === "") {
           alert("Enter City");
@@ -13,19 +15,27 @@ $(document).ready(function() {
       else {
           cities = cities.split(",")
           }
-      cities.push(inputCity);
-      localStorage.setItem("listOfCities", cities)
+      
+      if(cities.indexOf(inputCity) < 0) {
+        cities.push(inputCity);
+      }
+            localStorage.setItem("listOfCities", cities)
       currentWeatherData(inputCity);
       weekWeather(inputCity);
       $("#search-bar").val("");
       renderButtons();
   });
   function renderButtons() {
-      var cities = (localStorage.getItem("listOfCities"))
-      if (cities) {
-          cities = cities.split(",")
-          cities.forEach(function (city) {
-            var newRow = $("<button>").addClass("new-added-row cityButton").text(city).click(function(event){
+      var _cities = (localStorage.getItem("listOfCities"));
+      $("#previous-searches").html('');
+      if (_cities) {
+          _cities = _cities.split(",")
+          _cities.forEach(function (city) {
+            console.log(city);
+            var newRow = $("<button>");
+            newRow.addClass("new-added-row cityButton").text(city);
+              
+            newRow.click(function(event){
               currentWeatherData($(event.target).text());
               weekWeather($(event.target).text())
             });
@@ -35,7 +45,7 @@ $(document).ready(function() {
   }
   function currentWeatherData(inputCity) {
       fetch(
-       "https://api.openweathermap.org/data/2.5/weather?q=" + inputCity + "&appid=58a08c2908ce32624719339921d6bfb5&units=imperial"
+       "https://api.openweathermap.org/data/2.5/weather?q=" + inputCity + "&appid=402675f96bde8ad047ff5b58066a0e0a&units=imperial"
       )
       .then(function (response) {
           return response.json();
@@ -45,7 +55,7 @@ $(document).ready(function() {
               var coordLat = data.coord.lat;
               var coordLon = data.coord.lon;
           fetch(
-              `http://api.openweathermap.org/data/2.5/uvi?appid=58a08c2908ce32624719339921d6bfb5&lat=${coordLat}&lon=${coordLon}`
+              `http://api.openweathermap.org/data/2.5/uvi?appid=402675f96bde8ad047ff5b58066a0e0a&lat=${coordLat}&lon=${coordLon}`
           )
           .then(function (response) {
               return response.json();
@@ -53,6 +63,13 @@ $(document).ready(function() {
               .then(function (uvIndex) {
                   var todaysForecast = $("#today-forecast");
                   todaysForecast.empty();
+                  const uv= uvIndex.value;
+                  let uvColorClass = '';
+                  if (uv < 12) {
+                    uvColorClass =' green';
+                  } else if ( uv <16 ){
+                    uvColorClass = 'yellow';
+                  }
                   //var for today
                   var titleEl = $("<h2>");
                   var temperatureEl = $("<h4>");
@@ -64,7 +81,7 @@ $(document).ready(function() {
                   temperatureEl.text("Temperature: " + data.main.temp + " °F");
                   humidityEl.text("Humidity: " + data.main.humidity + " %");
                   windSpeedEl.text("Wind Speed: " + data.wind.speed + " MPH");
-                  uvIndexEl.text("UV Index: " + uvIndex.value)
+                  uvIndexEl.addClass(uvColorClass).text("UV Index: " + uvIndex.value)
                   //appending elements
                   todaysForecast.append(titleEl);
                   todaysForecast.append(temperatureEl);
@@ -77,7 +94,7 @@ $(document).ready(function() {
   function weekWeather(inputCity) {
       fetch (
           "https://api.openweathermap.org/data/2.5/forecast?q=" + inputCity +
-          "&appid=58a08c2908ce32624719339921d6bfb5&units=imperial"
+          "&appid=402675f96bde8ad047ff5b58066a0e0a&units=imperial"
       )
       .then (function(response) {
           return response.json()

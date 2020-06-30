@@ -18,27 +18,29 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <script src="https://kit.fontawesome.com/4a35b8bfa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
     <header>
-      <div class="jumbotron jumbotron-fluid">
-        <h1 class="display-3">Weather Dash</h1>
+      <div class="">
+        <h1 class="display-3">Weather Dashboard</h1>
       </div>
     </header>
 
-    <div class="container">
+    <div class="container flex-column flex-lg-row">
       <div class="row">
-        <div class="left-side col-lg-4">
-          <input type="text" placeholder="Enter a city" id="search-bar" />
-          <button type="button" id="test-button">Search</button>
+        <!-- search input -->
+        <form class="left-side col-lg-3">
+          <label for="city-input">Search for a City:</label>
+          <input type="text"  id="search-bar"/>
+          <button class="btn" type="button" id="test-button"><i class="fas fa-search"></i></button>
           <ul id="previous-searches"></ul>
-        </div>
-        <div class="right-side col-lg-8">
+        </form>
+        <!-- weather forecast -->
+        <div class="right-side col-lg-9">
           <div id="today-forecast"></div>
-          <div id="five-day-forecast" class="row">
-            
-          </div>
+          <div id="five-day-forecast" class="col-lg-12"></div>
         </div>
       </div>
     </div>
