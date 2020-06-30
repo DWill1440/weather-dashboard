@@ -27,7 +27,7 @@ $(document).ready(function() {
   });
   function renderButtons() {
       var _cities = (localStorage.getItem("listOfCities"));
-      $("#previous-searches").html('');
+      $("#previous-search").html('');
       if (_cities) {
           _cities = _cities.split(",")
           _cities.forEach(function (city) {
@@ -39,7 +39,7 @@ $(document).ready(function() {
               currentWeatherData($(event.target).text());
               weekWeather($(event.target).text())
             });
-            $("#previous-searches").append(newRow);
+            $("#previous-search").append(newRow);
           });
       }
   }
